@@ -57,24 +57,6 @@ export default {
 
       return data;
     },
-
-    testUpdateSpeed(value) {
-      this.test.currentSpeed = this.test.currentSpeed + value;
-
-      this.sendMessage("speed:update", {
-        value: Math.floor(this.test.currentSpeed)
-      });
-
-      if (value > 0 && this.test.currentSpeed > 140) {
-        value = -(this.test.currentSpeed * 0.1);
-      } else if (value < 0 && this.test.currentSpeed < 30) {
-        value = this.test.currentSpeed * 0.1;
-      }
-
-      setTimeout(() => {
-        this.testUpdateSpeed(value);
-      }, 200);
-    }
   },
 
   mounted() {
@@ -91,10 +73,6 @@ export default {
 
       this.currentSpeed = msg.data.Value;
     };
-
-    setTimeout(() => {
-      this.testUpdateSpeed(4);
-    }, 2000);
   }
 };
 </script>

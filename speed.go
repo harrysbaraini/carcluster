@@ -4,14 +4,10 @@ type SpeedData struct {
 	Value int `default:0 json:"value, omitempty"`
 }
 
-func OnSpeedUpdate(m Message) Message {
-	data := SpeedData{}
-	err := m.FromResponse(&data)
+func OnSpeedUpdate() Message {
+	data := SpeedData{53}
 
-	if err != nil {
-		m.Data = ""
-		return m
-	}
+	m := Message{"speed:update", "", nil}
 
 	return m.ToResponse(data)
 }
