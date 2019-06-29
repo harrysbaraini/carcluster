@@ -8,13 +8,14 @@
 import { setTimeout } from "timers";
 import { throws } from "assert";
 import Speedometer from './Speedometer'
+import { Server } from '../config'
 
 export default {
   name: "HelloWorld",
   components: {Speedometer},
   data() {
     return {
-      socket: new WebSocket("ws://127.0.0.1:5000"),
+      socket: new WebSocket(Server.socket),
       gauge: null,
       currentSpeed: 0,
       config: {

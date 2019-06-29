@@ -17,8 +17,7 @@
     "canvas-gauges": "^2.1.5",
     "svg.js": "^2.7.1",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1",
-    "vuetify": "^1.5.16"
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
