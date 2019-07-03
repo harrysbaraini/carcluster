@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "socket.io": "^2.2.0",
-    "vuetify": "^1.5.16"
-  }
-}

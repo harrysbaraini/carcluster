@@ -2,8 +2,12 @@
     <main :style="{width: `${config.Dashboard.size.width}px`, height: `${config.Dashboard.size.height}px`}">
         <svg id="drawing" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" :width="config.Dashboard.size.width" :height="config.Dashboard.size.height">
             <g class="circle circle-1" :transform="`translate(${config.position.x}, ${config.position.y}) rotate(180, 0, 0)`">
-                <circle :r="config.radius" class="outline" fill="transparent" stroke="#333" stroke-width="10" :stroke-dasharray="bgCircle.start" :stroke-dashoffset="bgCircle.end"></circle>
-                <circle ref="speedCircle" :r="config.radius" fill="transparent" stroke="#6495ED" stroke-width="10" stroke-linecap="round"></circle>
+                <circle :r="config.radius" class="outline" fill="transparent" stroke="#5D6769" stroke-width="6" stroke-linecap="round" :stroke-dasharray="bgCircle.start" :stroke-dashoffset="bgCircle.end"></circle>
+                <circle ref="speedCircle" :r="config.radius" fill="transparent" stroke="#FFD262" stroke-width="10" stroke-linecap="round"></circle>
+            </g>
+            <g :transform="`translate(${config.position.x}, ${config.position.y}) rotate(0, 0, 0)`">
+                <line ref="speedNeedle" x1="0" y1="0" x2="0" y2="-80" stroke="#FFD262" stroke-width="6" stroke-linecap="round" transform-origin="bottom center"></line>
+                <circle :r="12" fill="#FF5555" stroke="#7F4147" stroke-width="4"></circle>
             </g>
         </svg>
     </main>
@@ -33,6 +37,7 @@ import { setTimeout } from 'timers';
                     speedCircle: null,
                     speedText: null,
                     speedUnit: null,
+                    speedNeedle: null,
                 }
             }
         },
@@ -55,6 +60,7 @@ import { setTimeout } from 'timers';
                 return {
                     start: this.circunference,
                     end: this.circunference - newEnd,
+                    needle:180 * this.speed / Car.maxSpeed,
                 }
             }
         },
@@ -67,16 +73,19 @@ import { setTimeout } from 'timers';
 
                 this.instances.speedText
                     .text(Math.round(this.speed).toString())
-                    .x(this.instances.speedUnit.x() - this.instances.speedText.length() - 12)
+                    .x(this.instances.speedUnit.x() - this.instances.speedText.length() - 18)
 
                 this.instances.speedCircle
-                    .animate(200)
+                    .animate(100)
                     .attr('stroke-dashoffset', this.speedCircle.end)
+
+                this.instances.speedNeedle.animate(100).rotate(this.speedCircle.needle - 90, 0, 0)
             }
         },
 
         mounted() {
             this.instances.draw = SVG('drawing')
+            this.instances.speedNeedle = SVG.adopt(this.$refs.speedNeedle)
 
             this.instances.speedCircle = SVG.adopt(this.$refs.speedCircle).attr({
                 'stroke-dasharray': this.speedCircle.start,
@@ -91,13 +100,13 @@ import { setTimeout } from 'timers';
 
             this.instances.speedUnit
                 .x(this.config.position.x + this.instances.speedUnit.length())
-                .y(this.config.position.y + 12)
+                .y(this.config.position.y + 62)
 
             this.instances.speedText = this.instances.draw.text('').style({
                 fill: '#eee',
                 'font-family': '"Comfortaa", cursive',
                 'font-size': '42px',
-            }).y(this.config.position.y)
+            }).y(this.config.position.y + 50)
         },
     }
 </script>

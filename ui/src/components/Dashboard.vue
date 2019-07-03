@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { setTimeout } from "timers";
+import { setTimeout, setInterval } from "timers";
 import { throws } from "assert";
 import Speedometer from './Speedometer'
 import { Server } from '../config'
@@ -18,12 +18,10 @@ export default {
       socket: new WebSocket(Server.socket),
       gauge: null,
       currentSpeed: 0,
+      currentRPM: 0,
       config: {
         maxSpeed: 180
       },
-      test: {
-        currentSpeed: 0
-      }
     };
   },
 
@@ -44,6 +42,8 @@ export default {
     },
 
     readMessage(response) {
+      console.log(response.data);
+
       const msg = JSON.parse(response.data);
 
       if (null !== msg.error) {
@@ -71,8 +71,27 @@ export default {
     this.socket.onmessage = rsp => {
       const msg = this.readMessage(rsp);
 
-      this.currentSpeed = msg.data.Value;
+      this.currentSpeed = msg.data.speed;
+      this.currentRPM = msg.data.rpm;
     };
+
+    setInterval(() => {
+      this.currentSpeed += 2 + (this.currentSpeed * 0.001)
+
+      if (this.currentSpeed <= 100) {
+        if (this.currentSpeed < 30) {
+          this.currentSpeed += 2 + (this.currentSpeed * 0.001)
+        } else {
+          if (Math.round(Math.random())) {
+            this.currentSpeed -= 2 + (this.currentSpeed * 0.001)
+          }
+        }
+      } else {
+        if (this.currentSpeed > 100) {
+          this.currentSpeed = 10
+        }
+      }
+    }, 100)
   }
 };
 </script>
@@ -83,6 +102,6 @@ export default {
     position: absolute;
     width: 100vw;
     height: 100vh;
-    background: #141212;
+    background: #13314D;
 }
 </style>
